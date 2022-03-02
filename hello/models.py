@@ -28,7 +28,7 @@ def main():
             q6 = None
         elif menu == '7':
             q7 = Quiz07RandomChoice()
-            q7.chooseMember()
+            print(q7.chooseMember())
         elif menu == '8':
             q8 = Quiz08Rps(1) # 가위 1 바위 2 보 3
             print(q8.game())
