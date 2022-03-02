@@ -1,7 +1,7 @@
-from random import *
+import random
 def main():
     while 1:
-        menu = input('0.Exit 1.계산기 (+, -,*,/) 2.bmi 3.Grade')
+        menu = input('0.Exit 1.계산기 (+, -,*,/) 2.bmi 3.Grade 5.주사위')
         if menu == '0':
             break
         elif menu == '1':
@@ -23,11 +23,15 @@ def main():
             # grade =Grade(name,kor,eng,math)
             # print(f'{name}님의 국어{kor} 영어{eng} 수학{math} 합계{grade.sum()} 평균{grade.avg()}')
         elif menu == '5':
-            q5 = Quiz05Dice()
+            print(Quiz05Dice.cast())
         elif menu == '6':
-            q6 = Quiz06RandomGenerator()
+            q6 = None
         elif menu == '7':
             q7 = Quiz07RandomChoice()
+            q7.chooseMember()
+        elif menu == '8':
+            q8 = Quiz08Rps(1) # 가위 1 바위 2 보 3
+            print(q8.game())
 
 class Quiz01Calculator:
     def __init__(self, num1, op, num2):
@@ -88,14 +92,14 @@ class Quiz04GradeAuto(object):
     def chkPass(self): # 60점이상이면 합격
         pass
 
+def myRandom(start, end):
+    return random.randint(start, end)
 
 class Quiz05Dice(object):
-    def __init__(self):
-        pass
+    @staticmethod
+    def cast():
+        return myRandom(1, 6)
 
-class Quiz06RandomGenerator(object):
-    def __init__(self): # 원하는 범위의 정수에서 랜덤값 1개 추출
-        pass
 class Quiz07RandomChoice(object):
     def __init__(self): # 803호에서 랜덤으로 1명 이름 추출
         self.members = ['홍정명', '노홍주', '전종현', '정경준', '양정오',
@@ -103,10 +107,45 @@ class Quiz07RandomChoice(object):
                         '심민혜' , '권솔이', '김지혜' , '하진희' , '최은아',
                         '최민서', '한성수', '김윤섭', '김승현',
                         "강 민", "최건일", "유재혁", "김아름", "장원종"]
+    def chooseMember(self):
+        return self.members[myRandom(0, 23)]
 
 class Quiz08Rps(object):
-    def __init__(self):
-        pass
+    def __init__(self, player):
+        self.player = player
+        self.computer = myRandom(1,3)
+
+    def game(self):
+        c = self.computer
+        p = self.player
+        # 1 가위 2  바위 3 보
+        rps = ['가위', '바위', '보']
+        if p == 1:
+            if c == 1:
+                res = f'플레이어: {rps[0]} , 컴퓨터: {rps[0]}, 결과: 무승부'
+            elif c == 2:
+                res = f'플레이어: {rps[0]} , 컴퓨터: {rps[1]}, 결과: 패배'
+            elif c == '3':
+                res = f'플레이어: {rps[0]} , 컴퓨터: {rps[2]}, 결과: 승리'
+        elif p == 2:
+            if c == 1:
+                res = '승리'
+            elif c == 2:
+                res = '무승부'
+            elif c == 3:
+                res = '패배'
+        elif p == 3:
+            if c == 1:
+                res = '패배'
+            elif c == 2:
+                res = '승리'
+            elif c == 3:
+                res = '무승부'
+        else:
+            res = '1~3 입력'
+
+        return res
+
 class Quiz09GetPrime(object):
     def __init__(self):
         pass
