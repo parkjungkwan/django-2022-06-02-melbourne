@@ -60,9 +60,18 @@ class Quiz04GradeAuto(object):
         pass
 
 
-class Dice(object):
+class Quiz05Dice(object):
     def __init__(self):
         pass
+
+class Quiz06RandomGenerator(object):
+    def __init__(self): # 원하는 범위의 정수에서 랜덤값 1개 추출
+        pass
+class Quiz07RandomChoice(object):
+    def __init__(self): # 803호에서 랜덤으로 1명 이름 추출
+        self.members = ['홍정명', '노홍주', '전종현', '정경준', '양정오',
+                        "권혜민", "서성민", "조현국", "김한슬", "김진영",
+                        ]
 
 
 
@@ -76,7 +85,8 @@ if __name__ == '__main__':
             print(f'{calc.num1} + {calc.num2} = {calc.add()}')
         elif menu =='2':
             bmi = Quiz02Bmi(input('이름 : '), int(input('키 : ')), int(input('몸무게 : ')))
-            print(bmi.getBmi())
+            print(f'이름: {bmi.name}, 키: {bmi.height}, '
+                  f'몸무게: {bmi.weight}, BMI상태: {bmi.getBmi()} ')
         elif menu == '3':
             pass
         elif menu =='4':
@@ -87,6 +97,8 @@ if __name__ == '__main__':
             math = int(input('수학 : '))
             #grade =Grade(name,kor,eng,math)
             #print(f'{name}님의 국어{kor} 영어{eng} 수학{math} 합계{grade.sum()} 평균{grade.avg()}')
+        elif menu == '5':
+            dice = Quiz05Dice()
 
 
 
