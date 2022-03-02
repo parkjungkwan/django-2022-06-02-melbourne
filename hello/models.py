@@ -75,7 +75,27 @@ class Quiz07RandomChoice(object):
                         '최민서', '한성수', '김윤섭', '김승현',
                         "강 민", "최건일", "유재혁", "김아름", "장원종"]
 
-
+class Quiz08Rps(object):
+    def __init__(self):
+        pass
+class Quiz09GetPrime(object):
+    def __init__(self):
+        pass
+class Quiz10LeapYear(object):
+    def __init__(self):
+        pass
+class Quiz11NumberGolf(object):
+    def __init__(self):
+        pass
+class Quiz12Lotto(object):
+    def __init__(self):
+        pass
+class Quiz13Bank(object): # 이름, 입금, 출금만 구현
+    def __init__(self):
+        pass
+class Quiz14Gugudan(object): # 책받침구구단
+    def __init__(self):
+        pass
 
 if __name__ == '__main__':
     while 1:
