@@ -1,4 +1,33 @@
 from random import *
+def main():
+    while 1:
+        menu = input('0.Exit 1.계산기 (+, -,*,/) 2.bmi 3.Grade')
+        if menu == '0':
+            break
+        elif menu == '1':
+            q1 = Quiz01Calculator(int(input('첫번째 수')), int(input('두번째 수')))
+            print(f'{q1.num1} + {q1.num2} = {q1.add()}')
+        elif menu == '2':
+            q2 = Quiz02Bmi(input('이름 : '), int(input('키 : ')), int(input('몸무게 : ')))
+            print(f'이름: {q2.name}, 키: {q2.height}, '
+                  f'몸무게: {q2.weight}, BMI상태: {q2.getBmi()} ')
+        elif menu == '3':
+            q3 = Quiz03Grade()
+        elif menu == '4':
+            q4 = Quiz04GradeAuto()
+            for i in ['김유신', '강감찬', '유관순', '윤봉길', '신사임당']:
+                print(i)
+            kor = int(input('국어 : '))
+            eng = int(input('영어 : '))
+            math = int(input('수학 : '))
+            # grade =Grade(name,kor,eng,math)
+            # print(f'{name}님의 국어{kor} 영어{eng} 수학{math} 합계{grade.sum()} 평균{grade.avg()}')
+        elif menu == '5':
+            q5 = Quiz05Dice()
+        elif menu == '6':
+            q6 = Quiz06RandomGenerator()
+        elif menu == '7':
+            q7 = Quiz07RandomChoice()
 
 class Quiz01Calculator:
     def __init__(self, num1, op, num2):
@@ -98,34 +127,7 @@ class Quiz14Gugudan(object): # 책받침구구단
         pass
 
 if __name__ == '__main__':
-    while 1:
-        menu = input('0.Exit 1.계산기 (+, -,*,/) 2.bmi 3.Grade')
-        if menu == '0':
-            break
-        elif menu == '1':
-            q1 = Quiz01Calculator(int(input('첫번째 수')), int(input('두번째 수')))
-            print(f'{q1.num1} + {q1.num2} = {q1.add()}')
-        elif menu =='2':
-            q2 = Quiz02Bmi(input('이름 : '), int(input('키 : ')), int(input('몸무게 : ')))
-            print(f'이름: {q2.name}, 키: {q2.height}, '
-                  f'몸무게: {q2.weight}, BMI상태: {q2.getBmi()} ')
-        elif menu == '3':
-            q3 = Quiz03Grade()
-        elif menu =='4':
-            q4 = Quiz04GradeAuto()
-            for i in ['김유신', '강감찬', '유관순', '윤봉길', '신사임당']:
-                print(i)
-            kor = int(input('국어 : '))
-            eng = int(input('영어 : '))
-            math = int(input('수학 : '))
-            #grade =Grade(name,kor,eng,math)
-            #print(f'{name}님의 국어{kor} 영어{eng} 수학{math} 합계{grade.sum()} 평균{grade.avg()}')
-        elif menu == '5':
-            q5 = Quiz05Dice()
-        elif menu == '6':
-            q6 = Quiz06RandomGenerator()
-        elif menu == '7':
-            q7 = Quiz07RandomChoice()
+    main()
 
 
 
