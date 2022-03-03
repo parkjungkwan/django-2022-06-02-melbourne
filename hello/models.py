@@ -1,37 +1,4 @@
 import random
-def main():
-    while 1:
-        menu = input('0.Exit 1.계산기 (+, -,*,/) 2.bmi 3.Grade 5.주사위')
-        if menu == '0':
-            break
-        elif menu == '1':
-            q1 = Quiz01Calculator(int(input('첫번째 수')), int(input('두번째 수')))
-            print(f'{q1.num1} + {q1.num2} = {q1.add()}')
-        elif menu == '2':
-            q2 = Quiz02Bmi(input('이름 : '), int(input('키 : ')), int(input('몸무게 : ')))
-            print(f'이름: {q2.name}, 키: {q2.height}, '
-                  f'몸무게: {q2.weight}, BMI상태: {q2.getBmi()} ')
-        elif menu == '3':
-            q3 = Quiz03Grade()
-        elif menu == '4':
-            q4 = Quiz04GradeAuto()
-            for i in ['김유신', '강감찬', '유관순', '윤봉길', '신사임당']:
-                print(i)
-            kor = int(input('국어 : '))
-            eng = int(input('영어 : '))
-            math = int(input('수학 : '))
-            # grade =Grade(name,kor,eng,math)
-            # print(f'{name}님의 국어{kor} 영어{eng} 수학{math} 합계{grade.sum()} 평균{grade.avg()}')
-        elif menu == '5':
-            print(Quiz05Dice.cast())
-        elif menu == '6':
-            q6 = None
-        elif menu == '7':
-            q7 = Quiz07RandomChoice()
-            print(q7.chooseMember())
-        elif menu == '8':
-            q8 = Quiz08Rps(1) # 가위 1 바위 2 보 3
-            print(q8.game())
 
 class Quiz01Calculator:
     def __init__(self, num1, op, num2):
@@ -49,13 +16,10 @@ class Quiz01Calculator:
         pass
 
 class Quiz02Bmi(object):
-    def __init__(self, name, height, weight):
-        self.name = name
-        self.height = height
-        self.weight = weight
-
-    def getBmi(self):
-        bmires =self.weight/(self.height*self.height)*10000
+    @staticmethod
+    def getBmi(member):
+        this = member
+        bmires =this.weight/(this.height*this.height)*10000
         if bmires > 25:
             return f'비만'
         elif bmires > 23:
@@ -165,8 +129,6 @@ class Quiz14Gugudan(object): # 책받침구구단
     def __init__(self):
         pass
 
-if __name__ == '__main__':
-    main()
 
 
 
