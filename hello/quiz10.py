@@ -1,6 +1,43 @@
 import random
 
-class Quiz01Calculator:
+if __name__ == '__main__':
+    while 1:
+        menu = input('10버블 11삽입 12선택 13퀵 14병합 15매직 16지그재그 17직각별 18정삼각별 19예약')
+        if menu == '0':
+            break
+        elif menu == '1':
+            q1 = Quiz01Calculator(int(input('첫번째 수')), int(input('두번째 수')))
+            print(f'{q1.num1} + {q1.num2} = {q1.add()}')
+        elif menu == '2':
+            member = Member()
+            q2 = Quiz02Bmi()
+            member.name = input('이름 : ')
+            member.height = float(input('키 : '))
+            member.weight = float(input('몸무게 : '))
+            res = q2.getBmi(member)
+            print(f'이름: {member.name}, 키: {member.height}, '
+                  f'몸무게: {member.weight}, BMI상태: {res} ')
+        elif menu == '3':
+            q3 = Quiz03Grade()
+        elif menu == '4':
+            q4 = Quiz04GradeAuto()
+            for i in ['김유신', '강감찬', '유관순', '윤봉길', '신사임당']:
+                print(i)
+            kor = int(input('국어 : '))
+            eng = int(input('영어 : '))
+            math = int(input('수학 : '))
+            # grade =Grade(name,kor,eng,math)
+            # print(f'{name}님의 국어{kor} 영어{eng} 수학{math} 합계{grade.sum()} 평균{grade.avg()}')
+        elif menu == '5':
+            print(Quiz05Dice.cast())
+        elif menu == '6':
+            q6 = None
+        elif menu == '7':
+            q7 = Quiz07RandomChoice()
+            print(q7.chooseMember())
+        elif menu == '8':
+            q8 = Quiz08Rps(1) # 가위 1 바위 2 보 3
+            print(q8.game())
     def __init__(self, num1, op, num2):
         self.num1 = num1
         self.op = op
@@ -84,7 +121,7 @@ class Quiz08Rps(object):
         p = self.player
         # 1 가위 2  바위 3 보
         rps = ['가위', '바위', '보']
-        if p == 1:
+        '''if p == 1:
             if c == 1:
                 res = f'플레이어: {rps[0]} , 컴퓨터: {rps[0]}, 결과: 무승부'
             elif c == 2:
@@ -108,8 +145,16 @@ class Quiz08Rps(object):
         else:
             res = '1~3 입력'
 
+        return res'''
+        if p == c:
+            res = f'플레이어:{rps[p - 1]}, 컴퓨터:{rps[c - 1]}, 결과:무승부'
+        elif p - c == 1 or p -c  == -2:
+            res = f'플레이어:{rps[p - 1]}, 컴퓨터:{rps[c - 1]}, 결과:승리'
+        elif p - c == -1 or p - c == 2:
+            res = f'플레이어:{rps[p - 1]}, 컴퓨터:{rps[c - 1]}, 결과:패배'
+        else:
+            res = '1~3 입력'
         return res
-
 class Quiz09GetPrime(object):
     def __init__(self):
         pass
