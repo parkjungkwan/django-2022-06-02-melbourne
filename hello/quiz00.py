@@ -1,12 +1,18 @@
 from hello import Member
-from hello.domains import my100, myRandom
+from hello.domains import my100, myRandom, memberlist
 
 
 class Quiz00:
     def quiz00calculator(self)-> float:
         a = my100()
         b = my100()
-        return self.add(a, b)
+        o = ['+','-','*','/','%']
+
+        if(o =='+'):
+            c = self.add(a, b)
+            print(c)
+
+        return None
 
     def add(self, a, b) -> float:
         return a + b
@@ -108,12 +114,8 @@ class Quiz00:
         pass
 
     def quiz06memberChoice(self):
-        members = ['홍정명', '노홍주', '전종현', '정경준', '양정오',
-                   "권혜민", "서성민", "조현국", "김한슬", "김진영",
-                   '심민혜', '권솔이', '김지혜', '하진희', '최은아',
-                   '최민서', '한성수', '김윤섭', '김승현',
-                   "강 민", "최건일", "유재혁", "김아름", "장원종"]
-        return members[myRandom(0, 23)]
+
+        return memberlist[myRandom(0, 23)]
 
     def quiz07lotto(self):
         pass
