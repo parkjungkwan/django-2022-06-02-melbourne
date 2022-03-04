@@ -17,8 +17,8 @@ class Quiz10:
 
     def quiz16zigzag(self) -> str: return None
 
-    def quiz17star(self) -> str: return None
+    def quiz17prime(self) -> str: return None
 
-    def quiz18triangle(self) -> str: return None
+    def quiz18golf(self) -> str: return None
 
     def quiz19booking(self) -> str: return None
