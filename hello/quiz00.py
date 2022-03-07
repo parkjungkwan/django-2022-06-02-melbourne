@@ -7,8 +7,8 @@ class Quiz00:
         a = my100()
         b = my100()
         o = ['+','-','*','/','%']
-
-        if(o =='+'):
+        o2 = o[myRandom(0,5)]
+        if(o2 =='+'):
             c = self.add(a, b)
             print(c)
 
@@ -89,7 +89,20 @@ class Quiz00:
         print(res)
 
     def quiz04leap(self):
-        pass
+        y = myRandom(2000, 2022)
+        '''
+        s1 = "윤년" if y % 4 == 0 and y % 100 != 0 else "평년"
+        s2 = "윤년" if y % 400 == 0 else "평년"
+        Java Style => String s = : () ? : ;
+        s = (y % 4 == 0 && y % 100 != 0) ? "윤년" : (y % 400 == 0) ? "윤년" : "평년" ;
+        Python Style  => s = "" if else ""
+        '''
+        s = "윤년" if y % 4 == 0 and y % 100 != 0 or y % 400 == 0 else "평년"
+        
+
+        print(f'{y}년은 {s}입니다.')
+        return None
+        
 
     def quiz05grade(self):
         kor = myRandom(0,100)
@@ -114,23 +127,45 @@ class Quiz00:
         pass
 
     def quiz06memberChoice(self):
-
-        return memberlist[myRandom(0, 23)]
+        return memberlist()[myRandom(0, 23)]
 
     def quiz07lotto(self):
         pass
 
     def quiz08bank(self):  # 이름, 입금, 출금만 구현
-        pass
+        print(Account().to_string())
 
     def quiz09gugudan(self):  # 책받침구구단
         pass
 
+'''
+08번 문제 해결을 위한 클래스는 다음과 같다.
+[요구사항(RFP)]
+은행이름은 비트은행이다.
+입금자 이름(name), 계좌번호(account_number), 금액(money) 속성값으로 계좌를 생성한다.
+계좌번호는 3자리-2자리-6자리 형태로 랜덤하게 생성된다.
+예를들면 123-12-123456 이다.
+금액은 100 ~ 999 사이로 랜덤하게 입금된다. (단위는 만단위로 암묵적으로 판단한다)
+'''
+class Account(object):
+    def __init__(self):
+        self.BANK_NAME = '비트은행'
+        self.name = Quiz00().quiz06memberChoice()
+        # self.account_number = f'{myRandom(0, 1000):0>3}-{myRandom(0, 100):0>2}-{myRandom(0, 1000000):0>6}'
+        self.account_number = self.creat_account_number()
+        self.money = myRandom(100, 1000)
+
+    def to_string(self):
+        return f'은행 : {self.BANK_NAME}, ' \
+               f'입금자: {self.name},' \
+               f'계좌번호: {self.account_number},' \
+               f'금액: {self.money} 만원'
 
 
-
-
-
+    def creat_account_number(self):
+        ls = [str(i) for i in range(3)]
+        ls.append("-")
+        return "".join(ls)
 
 
 
