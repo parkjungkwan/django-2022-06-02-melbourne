@@ -172,13 +172,17 @@ class Account(object):
         return "".join(ls)'''
         return ''.join('-' if i==3 or i==6 else str(myRandom(1, 10)) for i in range(13))
 
+    def deposit(self):
+        print('계좌번호: ???? 입금액: ?? ')
+
     @staticmethod
     def find_account(ls, account_number):
        # return ''.join([ j.to_string() if j.account_number == account_number else '찾는 계좌 아님'  for i, j in enumerate(ls)])
        for i, j in enumerate(ls):
            if j.account_number == account_number:
-               a = ls[i]
-       return a
+               return ls[i]
+
+
 
 
     @staticmethod
@@ -202,7 +206,7 @@ class Account(object):
                 print(a)
             elif menu == '3':
                 account_number = input('입금할 계좌번호')
-                deposit = input('입금액')
+                deposit = int(input('입금액')) # string -> int
                 # 힌트 a.money + deposit
                 for i, j in enumerate(ls):
                     if j.account_number == account_number:
