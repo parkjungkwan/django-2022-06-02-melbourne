@@ -172,7 +172,13 @@ class Account(object):
         return "".join(ls)'''
         return ''.join('-' if i==3 or i==6 else str(myRandom(1, 10)) for i in range(13))
 
-    def del_account(self, ls, account_number):
+    @staticmethod
+    def find_account(ls, account_number):
+       return ''.join([ j.to_string() if j.account_number == account_number else '찾는 계좌 아님'  for i, j in enumerate(ls)])
+
+
+    @staticmethod
+    def del_account(ls, account_number):
         for i, j in enumerate(ls):
             if j.account_number == account_number:
                 del ls[i]
@@ -180,7 +186,7 @@ class Account(object):
     def main():
         ls = []
         while 1 :
-            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출금 5.계좌해지')
+            menu = input('0.종료 1.계좌개설 2.계좌목록 3.입금 4.출금 5.계좌해지 6.계좌조회')
             if menu == '0':
                 break
             if menu == '1':
@@ -201,7 +207,9 @@ class Account(object):
                 money = input('출금액')
                 # 추가코드 완성
             elif menu == '5':
-                account_number = input('탈퇴할 계좌번호')
+                Account.del_account(ls, input('탈퇴할 계좌번호'))
+            elif menu == '6':
+                print(Account.find_account(ls, input('검색할 계좌번호') ))
             else:
                 print('Wrong Number.. Try Again')
                 continue
