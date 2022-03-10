@@ -182,9 +182,6 @@ class Account(object):
            if j.account_number == account_number:
                return ls[i]
 
-
-
-
     @staticmethod
     def del_account(ls, account_number):
         for i, j in enumerate(ls):
@@ -222,7 +219,4 @@ class Account(object):
             else:
                 print('Wrong Number.. Try Again')
                 continue
-        
-    
-    
         
