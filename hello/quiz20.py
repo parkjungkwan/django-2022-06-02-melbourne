@@ -130,21 +130,27 @@ class Quiz20:
         df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
     '''
-    다음 결과 출력
+    데이터프레임 문제 Q01.
+    홀짝을 구분하는 리스트컴프리헨션과 zip()으로 딕셔너리를 결합시킨
+    로직으로 작성하시오. 다음 결과가 출력되야 한다.
         a   b   c
     1   1   3   5
     2   2   4   6 
+   
     '''
     def quiz29_pandas_df(self) -> object:
         d = {'a': [1, 2], 'b': [3, 4], 'c': [5, 6]}
         df1 = pd.DataFrame(d, index=[1, 2])
         d2 = {"1":[1, 3, 5], "2":[2,4,6]}
         df2 = pd.DataFrame.from_dict(d2, orient='index', columns=['a','b','c'])
+        columns = [chr(i) for i in range(97, 100)] # ['a','b','c']
+        e = [i if i == 0 else i for i in range(1,7)]
+        d3 = {"1": [1, 3, 5]}
+        d4 = {"2": [2, 4, 6]}
 
-        print(df2)
+        df3 = pd.DataFrame.from_dict(d2, orient='index', columns=columns)
+        print(df3)
         return None
-
-
 
 
 
