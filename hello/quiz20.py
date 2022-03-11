@@ -37,7 +37,7 @@ class Quiz20:
         a = [i if i==0 or i ==0 else i for i in range(1)]
         b = [i if i ==0 or i ==0 else i for i in []]
         c = [(i,j) for i,j in enumerate([])]
-        d = {i:j for i,j in zip(ls1,ls2)}
+        d = {i : j for i,j in zip(ls1,ls2)}
         l = [i + j for i, j in zip(ls1,ls2) ]
         l2 = list(zip(ls1, ls2))
         d1 = dict(zip(ls1,ls2))
@@ -100,8 +100,7 @@ class Quiz20:
             c.add(q.quiz06member_choice())
         students = list(c)
         scores = [myRandom(0,101) for i in range(5)]
-        
-        return None
+        return {i : j for i, j in zip(students, scores)}
 
     def quiz26map(self) -> str: return None
 
@@ -113,9 +112,9 @@ class Quiz20:
         '''
         a = [i if i == 0 or i ==0 else i for i in range()]
         b = [ i if i ==0 or i ==0 else i for i in []]
-        c = [(i,j) for i,j in enumerate([])]
+        c = [(i, j) for i, j in enumerate([])]
         d = ''.join([])
-        e = {i:j for i, j zip(l1, l2)} 
+        e = {i:j for i, j zip (l1, l2)} 
         e2 = dict(zip(l1, l2))
         f = list(zip(l1, l2))
         '''
