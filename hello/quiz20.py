@@ -135,11 +135,11 @@ class Quiz20:
     1   1   3   5
     2   2   4   6 
     '''
-    def quiz29_pandas_create(self, ls) -> object:
+    def quiz29_pandas_df(self) -> object:
         d = {'a': [1, 2], 'b': [3, 4], 'c': [5, 6]}
         df1 = pd.DataFrame(d, index=[1, 2])
         d2 = {"1":[1, 3, 5], "2":[2,4,6]}
-        df2 = pd.DataFrame.from_dict(d2, orient='index', columns=ls)
+        df2 = pd.DataFrame.from_dict(d2, orient='index', columns=['a','b','c'])
 
         print(df2)
         return None
