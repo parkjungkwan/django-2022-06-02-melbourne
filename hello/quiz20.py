@@ -2,14 +2,20 @@ import random
 import urllib.request
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
-
+import pandas as pd
+from quiz00 import Quiz00
+from domains import myRandom
 class Quiz20:
 
     def quiz20list(self) -> str: return None
 
     def quiz21tuple(self) -> str: return None
 
-    def quiz22dict(self) -> str: return None
+    def quiz22dict(self) -> str:
+        ls = [i + j for i in range(5) for j in range(5)]
+        dt = {i + j for i in range(5) for j in range(5)}
+
+        return None
 
     def quiz23listcom(self) -> str:
         print('---------- legacy ----------')
@@ -22,22 +28,48 @@ class Quiz20:
         print(a2)
         return None
 
-    def quiz24zip(self) -> str:
+    def quiz24zip(self) -> {}:
         url = 'https://music.bugs.co.kr/chart/track/realtime/total'
         html_doc = urlopen(url)
         soup = BeautifulSoup(html_doc, 'lxml') # html.parser vs lxml
         ls1 = self.find_music(soup, 'title')
         ls2 = self.find_music(soup, 'artist')
-        dict = {}
+        a = [i if i==0 or i ==0 else i for i in range(1)]
+        b = [i if i ==0 or i ==0 else i for i in []]
+        c = [(i,j) for i,j in enumerate([])]
+        d = {i:j for i,j in zip(ls1,ls2)}
+        l = [i + j for i, j in zip(ls1,ls2) ]
+        l2 = list(zip(ls1, ls2))
+        d1 = dict(zip(ls1,ls2))
+        print(d1)
+        # self.dict1(ls1, ls2)
+        # self.dict2(ls1, ls2)
+        # self.dict3(ls1, ls2)
+        return d
+    @staticmethod
+    def dict1(ls1, ls2) -> None:
+        dt = {}
         for i in range(0, len(ls1)):
             print(type(f'타입: {ls1[i]}'))
-            dict[ls1[i]] = ls2[i]
-        print(dict)
-        return None
+            dt[ls1[i]] = ls2[i]
+        print(dt)
 
-    
+    @staticmethod
+    def dict2(ls1, ls2) -> None:
+        dt = {}
+        for i, j in enumerate(ls1):
+            dt[j] = ls2[i]
+        print(dt)
 
-    def print_music_list(self, soup):
+    @staticmethod
+    def dict3(ls1, ls2) -> None:
+        dt = {}
+        for i, j in zip(ls1, ls2):
+            dt[i] = j
+        print(dt)
+
+
+    def print_music_list(self, soup) -> None:
         artists = soup.find_all('p', {'class': 'artist'})
         # print(type(artists)) # <class 'bs4.element.ResultSet'>
         artists = [i.get_text() for i in artists]
@@ -58,7 +90,18 @@ class Quiz20:
         ls = soup.find_all('p', {'class': cls_nm})
         return [i.get_text() for i in ls]
 
-    def quiz25dictcom(self) -> str: return None
+
+    def quiz25dictcom(self) -> str:
+        # quiz06memberChoice() 를 import 해서 문제해결. 이것이 1명인데 5명 추출
+        # scores 는 0 ~ 100점 사이에서 랜덤
+        q = Quiz00()
+        c = set([q.quiz06member_choice() for i in range(5)])
+        while len(c) != 5:
+            c.add(q.quiz06member_choice())
+        students = list(c)
+        scores = [myRandom(0,101) for i in range(5)]
+        
+        return None
 
     def quiz26map(self) -> str: return None
 
@@ -71,16 +114,20 @@ class Quiz20:
         a = [i if i == 0 or i ==0 else i for i in range()]
         b = [ i if i ==0 or i ==0 else i for i in []]
         c = [(i,j) for i,j in enumerate([])]
-        d = ''.join(i for i in [])
+        d = ''.join([])
+        e = {i:j for i, j zip(l1, l2)} 
+        e2 = dict(zip(l1, l2))
+        f = list(zip(l1, l2))
         '''
         return None
 
     
 
-    def quiz28(self) -> str:
-
-
-        return None
+    def quiz28dataframe(self) -> None:
+        dt = self.quiz24zip()
+        df = pd.DataFrame.from_dict(dt, orient='index')
+        print(df)
+        df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
 
 
