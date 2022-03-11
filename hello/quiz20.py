@@ -125,12 +125,23 @@ class Quiz20:
     def quiz28dataframe(self) -> None:
         dt = self.quiz24zip()
         df = pd.DataFrame.from_dict(dt, orient='index')
+        soup = BeautifulSoup()
         print(df)
         df.to_csv('./save/bugs.csv', sep=',', na_rep='NaN')
 
+    '''
+    다음 결과 출력
+        a   b   c
+    1   1   3   5
+    2   2   4   6 
+    '''
+    def quiz29_pandas_create(self, ls) -> object:
+        d = {'a': [1, 2], 'b': [3, 4], 'c': [5, 6]}
+        df1 = pd.DataFrame(d, index=[1, 2])
+        d2 = {"1":[1, 3, 5], "2":[2,4,6]}
+        df2 = pd.DataFrame.from_dict(d2, orient='index', columns=ls)
 
-
-    def quiz29(self) -> str:
+        print(df2)
         return None
 
 
