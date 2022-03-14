@@ -4,8 +4,8 @@ import string
 import pandas as pd
 from icecream import ic
 import numpy as np
-
-from hello.domains import myRandom
+from titanic.models import Model
+from hello.domains import myRandom, memberlist
 
 
 class Quiz30:
@@ -92,7 +92,26 @@ class Quiz30:
                            vals=np.random.randint(0,100,4),
                            len=3)
         # ic(df)
+        # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
+        # grade.csv
+        model = Model()
+        grade_df = model.new_model('grade.csv')
+        ic(grade_df)
 
+
+
+
+
+        subj = ['자바', '파이썬', '자바스크립트', 'SQL']
+        stud = memberlist()
+
+        return None
+    @staticmethod
+    def createDf(keys, vals, len):
+        return pd.DataFrame([dict(zip(keys,vals)) for _ in range(len)])
+
+
+    def quiz34_df_iloc(self) -> str:
         # ic(df.iloc[0])
         '''
         ic| df.iloc[0]: a    61
@@ -125,16 +144,40 @@ class Quiz30:
                                           0  96  6  77  28
                                           2  96  6  77  28
         '''
-
-
-        return None
-    @staticmethod
-    def createDf(keys, vals, len):
-        return pd.DataFrame([dict(zip(keys,vals)) for _ in range(len)])
-
-
-    def quiz34_df_iloc(self) -> str:
-
+        # ic(df.iloc[lambda x: x.index % 2 == 0])
+        '''
+        ic| df.iloc[lambda x: x.index % 2 == 0]:     a   b   c   d
+                                                 0  65  40  32  69
+                                                 2  65  40  32  69
+        '''
+        # ic(df.iloc[0, 1])
+        '''ic| df.iloc[0, 1]: 32'''
+        # ic(df.iloc[[0, 2], [1, 3]])
+        '''
+        ic| df.iloc[[0, 2], [1, 3]]:     b   d
+                                     0  12  10
+                                     2  12  10
+        '''
+        # ic(df.iloc[1:3, 0:3])
+        '''
+        ic| df.iloc[1:3, 0:3]:     a  b   c
+                                1  82  9  12
+                                2  82  9  12
+        '''
+        # ic(df.iloc[:, [True, False, True, False]])
+        '''
+        ic| df.iloc[:, [True, False, True, False]]:     a   c
+                                                    0  86  99
+                                                    1  86  99
+                                                    2  86  99
+        '''
+        # ic(df.iloc[:, lambda df: [0, 2]])
+        '''
+        ic| df.iloc[:, lambda df: [0, 2]]:     a   c
+                                            0  59  58
+                                            1  59  58
+                                            2  59  58
+        '''
         return None
 
     def quiz35(self) -> str: return None
