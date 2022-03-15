@@ -1,7 +1,6 @@
-from titanic.domains import Dataset
-import numpy as np
+from context.domains import Dataset
 import pandas as pd
-import sklearn
+
 
 class Model:
     def __init__(self):

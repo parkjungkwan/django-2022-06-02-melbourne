@@ -4,8 +4,8 @@ import string
 import pandas as pd
 from icecream import ic
 import numpy as np
-from titanic.models import Model
-from hello.domains import myRandom, memberlist
+from context.models import Model
+from hello.domains import memberlist
 
 
 class Quiz30:
@@ -87,31 +87,6 @@ class Quiz30:
         ic(df2)
         return None
 
-    def quiz33_df_loc(self) -> str:
-
-
-        df = self.createDf(keys=['a', 'b', 'c', 'd'],
-                           vals=np.random.randint(0, 100, 4),
-                           len=3)
-        # ic(df)
-        # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
-        # grade.csv
-        model = Model()
-        grade_df = model.new_model('grade_backup.csv')
-        ic(grade_df)
-
-        print('Q1. 파이썬의 점수만 출력하시오')
-        python_scores = []
-        df.iloc[[1]]
-
-        ic(python_scores)
-        print('Q2. 조현국의 점수만 출력하시오')
-        cho_scores = None
-        ic(cho_scores)
-
-        # ic(df)
-        return None
-
     @staticmethod
     def createDf(keys, vals, len):
         return pd.DataFrame([dict(zip(keys, vals)) for _ in range(len)])
@@ -119,23 +94,23 @@ class Quiz30:
     def quiz33_df_loc(self) -> str:
 
         '''
+        데이터프레임 생성 예제
         d = [{'a': 1, 'b': 2, 'c': 3, 'd': 4},
              {'a': 100, 'b' : 200, 'c' : 300, 'd' : 400},
-             {'a' : 1000, 'b' : 2000, 'c' : 3000, 'd' : 4000}]'''
+             {'a' : 1000, 'b' : 2000, 'c' : 3000, 'd' : 4000}]
 
         df = self.createDf(keys=['a','b','c','d'],
                            vals=np.random.randint(0,100,4),
                            len=3)
+        '''
         # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
-        # grade.csv
         subjects = ['자바', '파이썬', '자바스크립트', 'SQL']
         scores = np.random.randint(0, 100, (24, 4))
         students = memberlist()
-        dc = {i: j for i, j in zip(students, scores)}
-        # z1 = dict(zip(students, scores))
-        df = pd.DataFrame.from_dict(dc, orient="index", columns=subjects)
+        students_scores = {student:score for student,score in zip(students, scores)}
+        students_scores_df = pd.DataFrame.from_dict(students_scores, orient="index", columns=subjects)
         model = Model()
-        # model.save_model(fname='grade.csv', dframe=df)
+        # model.save_model(fname='grade.csv', dframe=students_scores_df)
         grade_df = model.new_model(fname='grade.csv')
         ic(grade_df)
         print('Q1. 파이썬의 점수만 출력하시오')
