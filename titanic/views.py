@@ -1,5 +1,6 @@
 from titanic.models import Model
 from titanic.domains import Dataset
+from icecream import ic
 
 
 class View:
@@ -17,6 +18,8 @@ class View:
         # id 추출
         print(f'트레인 컬럼 {this.train.columns}')
         print(f'트레인 헤드 {this.train.head()}')
+        ic(this.train)
+
 
 
 

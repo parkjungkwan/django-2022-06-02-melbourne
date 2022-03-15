@@ -88,22 +88,69 @@ class Quiz30:
         return None
 
     def quiz33_df_loc(self) -> str:
-        df = self.createDf(keys=['a','b','c','d'],
-                           vals=np.random.randint(0,100,4),
+
+
+        df = self.createDf(keys=['a', 'b', 'c', 'd'],
+                           vals=np.random.randint(0, 100, 4),
                            len=3)
         # ic(df)
         # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
         # grade.csv
         model = Model()
-        grade_df = model.new_model('grade.csv')
+        grade_df = model.new_model('grade_backup.csv')
         ic(grade_df)
 
+        print('Q1. 파이썬의 점수만 출력하시오')
+        python_scores = []
+        df.iloc[[1]]
+
+        ic(python_scores)
+        print('Q2. 조현국의 점수만 출력하시오')
+        cho_scores = None
+        ic(cho_scores)
+
+        # ic(df)
+        return None
+
+    @staticmethod
+    def createDf(keys, vals, len):
+        return pd.DataFrame([dict(zip(keys, vals)) for _ in range(len)])
+
+    def quiz33_df_loc(self) -> str:
+
+        '''
+        d = [{'a': 1, 'b': 2, 'c': 3, 'd': 4},
+             {'a': 100, 'b' : 200, 'c' : 300, 'd' : 400},
+             {'a' : 1000, 'b' : 2000, 'c' : 3000, 'd' : 4000}]'''
+
+        df = self.createDf(keys=['a','b','c','d'],
+                           vals=np.random.randint(0,100,4),
+                           len=3)
+        # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.loc.html
+        # grade.csv
+        subjects = ['자바', '파이썬', '자바스크립트', 'SQL']
+        scores = np.random.randint(0, 100, (24, 4))
+        students = memberlist()
+        dc = {i: j for i, j in zip(students, scores)}
+        # z1 = dict(zip(students, scores))
+        df = pd.DataFrame.from_dict(dc, orient="index", columns=subjects)
+        model = Model()
+        # model.save_model(fname='grade.csv', dframe=df)
+        grade_df = model.new_model(fname='grade.csv')
+        ic(grade_df)
+        print('Q1. 파이썬의 점수만 출력하시오')
+        python_scores = None
+        ic(python_scores)
+        print('Q2. 조현국의 점수만 출력하시오')
+        cho_scores = None
+        ic(cho_scores)
 
 
 
 
-        subj = ['자바', '파이썬', '자바스크립트', 'SQL']
-        stud = memberlist()
+
+
+
 
         return None
     @staticmethod
