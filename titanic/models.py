@@ -4,18 +4,18 @@ from context.domains import Dataset
 from context.models import Model
 
 class TitanicModel(object):
+    model = Model()
+    dataset = Dataset()
     def __init__(self, train_fname, test_fname):
-        self.model = Model()
-        self.dataset = Dataset()
         self.train = self.model.new_model(train_fname)
         self.test = self.model.new_model(test_fname)
+        ic(f'트레인 컬럼 {self.df.columns}')
+        ic(f'트레인 헤드 {self.df.head()}')
         # id 추출
-        ic(f'트레인 컬럼 {self.train.columns}')
-        ic(f'트레인 헤드 {self.train.head()}')
-        ic(self.train)
 
     def preprocess(self):
         df = self.train
+        ic(df)
         df = self.drop_feature(df)
         df = self.create_train(df)
         df = self.create_label(df)
@@ -38,12 +38,12 @@ class TitanicModel(object):
 
     def drop_feature(self,df) -> object:
         a = [i for i in []]
-
-
+        '''
         self.cabin_garbage(df)
         self.parch_garbage(df)
         self.ticket_garbage(df)
         self.sib_sp_garbage(df)
+        '''
         return df
     '''
     Categorical vs. Quantitative
@@ -64,25 +64,7 @@ class TitanicModel(object):
         return df
 
     @staticmethod
-    def sib_sp_garbage(df) -> object:
-        self.drop_feature()
-        return df
-
-    @staticmethod
-    def parch_garbage(df) -> object:
-        self.drop_feature()
-        return df
-
-    @staticmethod
-    def ticket_garbage(df) -> object:
-        return df
-
-    @staticmethod
     def sex_nominal(df)->object:
-        return df
-
-    @staticmethod
-    def cabin_garbage(df) -> object:
         return df
 
     @staticmethod

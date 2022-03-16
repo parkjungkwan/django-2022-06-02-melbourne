@@ -11,6 +11,7 @@ class Dataset:
     test : str
     id : str
     label : str
+   
     @property
     def dname(self) -> str : return self._dname
     @dname.setter
