@@ -114,16 +114,17 @@ class Quiz30:
         grade_df = model.new_model(fname='grade.csv')
         ic(grade_df)
         print('Q1. 파이썬의 점수만 출력하시오')
-        python_scores = None
+        python_scores = grade_df.loc[:,'파이썬']
+        ic(type(python_scores))
         ic(python_scores)
         print('Q2. 조현국의 점수만 출력하시오')
-        cho_scores = None
+        cho_scores = grade_df.loc['조현국']
+        ic(type(cho_scores))
         ic(cho_scores)
-
-
-
-
-
+        print('Q3. 조현국의 과목별 점수를 출력하시오')
+        cho_subjects_scores = grade_df.loc[['조현국']]
+        ic(type(cho_subjects_scores))
+        ic(cho_subjects_scores)
 
 
 
