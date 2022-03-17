@@ -41,7 +41,9 @@ class TitanicTemplate(object):
         ax[0].set_ylabel('')
         ax[1].set_title('0.사망자 vs 1.생존자')
         sns.countplot('Survived', data=this, ax=ax[1])
-        plt.show()
+        # plt.show()
+        model = Model()
+        plt.savefig(f'{model.get_sname()}draw_survived.png')
 
     @staticmethod
     def draw_pclass(this) -> None:
