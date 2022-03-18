@@ -2,7 +2,7 @@ from icecream import ic
 
 from context.domains import Dataset
 from context.models import Model
-
+import numpy as np
 
 class TitanicModel(object):
 
@@ -122,13 +122,21 @@ class TitanicModel(object):
 
     @staticmethod
     def age_ratio(this) -> object:
-
+        train = this.train
+        test = this.test
+        age_mapping = {'Unknown':0 , 'Baby': 1, 'Child': 2, 'Teenager' : 3, 'Student': 4,
+                       'Young Adult': 5, 'Adult':6,  'Senior': 7}
+        train['Age'] = train['Age'].fillna(-0.5)
+        test['Age'] = test['Age'].fillna(-0.5)
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
+        # pd.cut() 을 사용하시오
         return this
 
     @staticmethod
     def sex_nominal(this)->object:
+        gender_mapping = {'male': 0, 'female': 1}
         for these in [this.train, this.test]:
-            gender_mapping = {'male':0, 'female':1}
             these['Gender'] = these['Sex'].map(gender_mapping)
         return this
 
