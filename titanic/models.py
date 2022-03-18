@@ -3,7 +3,7 @@ from icecream import ic
 from context.domains import Dataset
 from context.models import Model
 import numpy as np
-
+import pandas as pd
 class TitanicModel(object):
 
     model = Model()
@@ -127,8 +127,8 @@ class TitanicModel(object):
         age_mapping = {'Unknown':0 , 'Baby': 1, 'Child': 2, 'Teenager' : 3, 'Student': 4,
                        'Young Adult': 5, 'Adult':6,  'Senior': 7}
         train['Age'] = train['Age'].fillna(-0.5)
-        test['Age'] = test['Age'].fillna(-0.5)
-        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf]
+        test['Age'] = test['Age'].fillna(-0.5) # 왜 NaN 값에 -0.5 를 할당할까요 ?
+        bins = [-1, 0, 5, 12, 18, 24, 35, 60, np.inf] # 이것을 이해해보세요
         labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
         for these in train, test:
             # pd.cut() 을 사용하시오. 다른 곳은 고치지 말고 다음 두 줄만 코딩하시오
@@ -153,6 +153,10 @@ class TitanicModel(object):
 
     @staticmethod
     def fare_ratio(this) -> object:
+        this.test['Fare'] = this.test['Fare'].fillna(1)
+        this.train['FareBand'] = pd.qcut(this.train['Fare'], 4)
+        # print(f'qcut 으로 bins 값 설정 {this.train["FareBand"].head()}')
+        bins = [-1, 8, 15, 31, np.inf]
         return this
 
 
