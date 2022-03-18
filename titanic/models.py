@@ -22,7 +22,8 @@ class TitanicModel(object):
         # Entity 에서 Object 로 전환
         this = self.drop_feature(this, 'SibSp','Parch','Ticket','Cabin')
         # self.kwargs_sample(name='이순신') kwargs 샘플... 타이타닉 흐름과 무관
-        this = self.name_nominal(this)
+        self.extract_title(this)
+        # this = self.name_nominal(this)
         '''
         this = self.sex_nominal(this)
         this = self.age_ratio(this)
@@ -49,7 +50,7 @@ class TitanicModel(object):
 
     @staticmethod
     def drop_feature(this, *feature) -> object:
-        ic(type(feature))
+        ic(type(feature)) # ic| type(feature): <class 'tuple'>
         '''
         for i in [this.train, this.test]:
             for j in feature:
@@ -59,7 +60,7 @@ class TitanicModel(object):
 
     @staticmethod
     def kwargs_sample(**kwargs) -> None:
-        ic(type(kwargs)) # ic| type(feature): <class 'tuple'>
+        ic(type(kwargs))
         {print(''.join(f'key:{i}, val:{j}')) for i, j in kwargs.items()} # key:name, val:이순신
 
     '''
@@ -79,6 +80,16 @@ class TitanicModel(object):
             dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.',expand=False)
             ic(dataset['Title'])
         return this
+
+    @staticmethod
+    def extract_title(this) -> None:
+        combine = [this.train, this.test]
+        a = set()
+        for dataset in combine:
+            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
+            a.add(dataset['Title'])
+        title_list = list(a)
+        ic(title_list)
 
     @staticmethod
     def age_ratio(this) -> object:
