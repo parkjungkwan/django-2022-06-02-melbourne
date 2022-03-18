@@ -25,7 +25,7 @@ class TitanicModel(object):
         this = self.extract_title_from_name(this)
         title_mapping = self.remove_duplicate(this)
         this = self.title_nominal(this, title_mapping)
-        this = self.drop_feature(this,'Name') # Name 삭제
+        this = self.drop_feature(this,'Name')
         '''
         this = self.sex_nominal(this)
         this = self.age_ratio(this)
@@ -79,17 +79,16 @@ class TitanicModel(object):
 
     @staticmethod
     def extract_title_from_name(this) -> None:
-        combine = [this.train, this.test]
-        for dataset in combine:
-            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
+        for these in [this.train, this.test]:
+            these['Title'] = these.Name.str.extract('([A-Za-z]+)\.', expand=False)
         # ic(this.train.head(5))
         return this
 
     @staticmethod
     def remove_duplicate(this) -> None:
         a = []
-        for dataset in [this.train, this.test]:
-            a += list(set(dataset['Title']))
+        for these in [this.train, this.test]:
+            a += list(set(these['Title']))
         a = list(set(a))
         # print(f'>>> {a}')
         '''
@@ -107,16 +106,15 @@ class TitanicModel(object):
 
     @staticmethod
     def title_nominal(this, title_mapping) -> object:
-        combine = [this.train, this.test]
-        for dataset in combine:
-            dataset['Title'] = dataset['Title'].replace(['Countess', 'Lady', 'Sir'], 'Royal')
-            dataset['Title'] = dataset['Title'].replace(['Capt','Col','Don','Dr','Major','Rev','Jonkheer','Dona','Mme'], 'Rare')
-            dataset['Title'] = dataset['Title'].replace(['Mlle'], 'Mr')
-            dataset['Title'] = dataset['Title'].replace(['Miss'], 'Ms')
+        for these in [this.train, this.test]:
+            these['Title'] = these['Title'].replace(['Countess', 'Lady', 'Sir'], 'Royal')
+            these['Title'] = these['Title'].replace(['Capt','Col','Don','Dr','Major','Rev','Jonkheer','Dona','Mme'], 'Rare')
+            these['Title'] = these['Title'].replace(['Mlle'], 'Mr')
+            these['Title'] = these['Title'].replace(['Miss'], 'Ms')
             # Master 는 변화없음
             # Mrs 는 변화없음
-            dataset['Title'] = dataset['Title'].fillna(0)
-            dataset['Title'] = dataset['Title'].map(title_mapping)
+            these['Title'] = these['Title'].fillna(0)
+            these['Title'] = these['Title'].map(title_mapping)
         return this
 
     @staticmethod
