@@ -23,10 +23,9 @@ class TitanicModel(object):
         this = self.drop_feature(this, 'SibSp','Parch','Ticket','Cabin')
         # self.kwargs_sample(name='이순신') kwargs 샘플... 타이타닉 흐름과 무관
         this = self.extract_title_from_name(this)
-        self.remove_duplicate(this)
-        # this = self.title_nominal(this)
-
-        # this = self.name_nominal(this)
+        title_mapping = self.remove_duplicate(this)
+        this = self.title_nominal(this, title_mapping)
+        this = self.drop_feature(this,'Name') # Name 삭제
         '''
         this = self.sex_nominal(this)
         this = self.age_ratio(this)
@@ -40,7 +39,9 @@ class TitanicModel(object):
 
     @staticmethod
     def df_info(this):
-        [ic(f'{i.info()}') for i in [this.train, this.test]]
+        [print(f'{i.info()}') for i in [this.train, this.test]]
+        ic(this.train.head(3))
+        ic(this.test.head(3))
 
     @staticmethod
     def null_check(this):
@@ -48,12 +49,12 @@ class TitanicModel(object):
 
     @staticmethod
     def id_info(this):
-        ic(f'9. id 의 타입  {type(this.id)}')
-        ic(f'10. id 의 상위 3개 {this.id[:3]}')
+        ic(f'id 의 타입  {type(this.id)}')
+        ic(f'id 의 상위 3개 {this.id[:3]}')
 
     @staticmethod
     def drop_feature(this, *feature) -> object:
-        ic(type(feature)) # ic| type(feature): <class 'tuple'>
+        # ic(type(feature)) # ic| type(feature): <class 'tuple'>
         '''
         for i in [this.train, this.test]:
             for j in feature:
@@ -63,7 +64,7 @@ class TitanicModel(object):
 
     @staticmethod
     def kwargs_sample(**kwargs) -> None:
-        ic(type(kwargs))
+        # ic(type(kwargs))
         {print(''.join(f'key:{i}, val:{j}')) for i, j in kwargs.items()} # key:name, val:이순신
 
     '''
@@ -81,7 +82,7 @@ class TitanicModel(object):
         combine = [this.train, this.test]
         for dataset in combine:
             dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
-        ic(this.train.head(5))
+        # ic(this.train.head(5))
         return this
 
     @staticmethod
@@ -90,7 +91,7 @@ class TitanicModel(object):
         for dataset in [this.train, this.test]:
             a += list(set(dataset['Title']))
         a = list(set(a))
-        print(f'>>> {a}')
+        # print(f'>>> {a}')
         '''
         ['Mr', 'Sir', 'Major', 'Don', 'Rev', 'Countess', 'Lady', 'Jonkheer', 'Dr',
         'Miss', 'Col', 'Ms', 'Dona', 'Mlle', 'Mme', 'Mrs', 'Master', 'Capt']
@@ -101,15 +102,21 @@ class TitanicModel(object):
         Master
         Mrs
         '''
-        title_mapping = {'Mr': 1, 'Miss': 2, 'Mrs':3, 'Master':4, 'Royal':5, 'Rare': 6}
+        title_mapping = {'Mr': 1, 'Ms': 2, 'Mrs':3, 'Master':4, 'Royal':5, 'Rare': 6}
         return title_mapping
 
     @staticmethod
-    def title_nominal(this) -> object:
+    def title_nominal(this, title_mapping) -> object:
         combine = [this.train, this.test]
         for dataset in combine:
-            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.',expand=False)
-            ic(dataset['Title'])
+            dataset['Title'] = dataset['Title'].replace(['Countess', 'Lady', 'Sir'], 'Royal')
+            dataset['Title'] = dataset['Title'].replace(['Capt','Col','Don','Dr','Major','Rev','Jonkheer','Dona','Mme'], 'Rare')
+            dataset['Title'] = dataset['Title'].replace(['Mlle'], 'Mr')
+            dataset['Title'] = dataset['Title'].replace(['Miss'], 'Ms')
+            # Master 는 변화없음
+            # Mrs 는 변화없음
+            dataset['Title'] = dataset['Title'].fillna(0)
+            dataset['Title'] = dataset['Title'].map(title_mapping)
         return this
 
     @staticmethod
