@@ -21,9 +21,9 @@ class TitanicModel(object):
         this.train = this.train.drop('Survived', axis=1)
         # Entity 에서 Object 로 전환
         this = self.drop_feature(this, 'SibSp','Parch','Ticket','Cabin')
-        # self.kwargs_sample(name='이순신')
-        '''
+        # self.kwargs_sample(name='이순신') kwargs 샘플... 타이타닉 흐름과 무관
         this = self.name_nominal(this)
+        '''
         this = self.sex_nominal(this)
         this = self.age_ratio(this)
         this = self.embarked_nominal(this)
@@ -74,6 +74,10 @@ class TitanicModel(object):
 
     @staticmethod
     def name_nominal(this) -> object:
+        combine = [this.train, this.test]
+        for dataset in combine:
+            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.',expand=False)
+            ic(dataset['Title'])
         return this
 
     @staticmethod
