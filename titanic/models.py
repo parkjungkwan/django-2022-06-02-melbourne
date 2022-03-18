@@ -26,8 +26,10 @@ class TitanicModel(object):
         title_mapping = self.remove_duplicate(this)
         this = self.title_nominal(this, title_mapping)
         this = self.drop_feature(this,'Name')
-        '''
         this = self.sex_nominal(this)
+        this = self.drop_feature(this, 'Sex')
+        '''
+        
         this = self.age_ratio(this)
         this = self.embarked_nominal(this)
         this = self.pclass_ordinal(this)
@@ -119,14 +121,20 @@ class TitanicModel(object):
 
     @staticmethod
     def age_ratio(this) -> object:
+
         return this
 
     @staticmethod
     def sex_nominal(this)->object:
+        for these in [this.train, this.test]:
+            gender_mapping = {'male':0, 'female':1}
+            these['Gender'] = these['Sex'].map(gender_mapping)
         return this
 
     @staticmethod
     def embarked_nominal(this) -> object:
+        embarked_mapping = {'S': 1, 'C': 2, 'Q':3}
+        this.train = this.train.fillna({'Embarked':'S'})
         return this
 
     @staticmethod
