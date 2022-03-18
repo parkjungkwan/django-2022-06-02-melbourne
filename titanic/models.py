@@ -22,7 +22,10 @@ class TitanicModel(object):
         # Entity 에서 Object 로 전환
         this = self.drop_feature(this, 'SibSp','Parch','Ticket','Cabin')
         # self.kwargs_sample(name='이순신') kwargs 샘플... 타이타닉 흐름과 무관
-        self.extract_title(this)
+        this = self.extract_title_from_name(this)
+        self.remove_duplicate(this)
+        # this = self.title_nominal(this)
+
         # this = self.name_nominal(this)
         '''
         this = self.sex_nominal(this)
@@ -74,22 +77,40 @@ class TitanicModel(object):
         return this
 
     @staticmethod
-    def name_nominal(this) -> object:
+    def extract_title_from_name(this) -> None:
+        combine = [this.train, this.test]
+        for dataset in combine:
+            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
+        ic(this.train.head(5))
+        return this
+
+    @staticmethod
+    def remove_duplicate(this) -> None:
+        a = []
+        for dataset in [this.train, this.test]:
+            a += list(set(dataset['Title']))
+        a = list(set(a))
+        print(f'>>> {a}')
+        '''
+        ['Mr', 'Sir', 'Major', 'Don', 'Rev', 'Countess', 'Lady', 'Jonkheer', 'Dr',
+        'Miss', 'Col', 'Ms', 'Dona', 'Mlle', 'Mme', 'Mrs', 'Master', 'Capt']
+        Royal : ['Countess', 'Lady', 'Sir']
+        Rare : ['Capt','Col','Don','Dr','Major','Rev','Jonkheer','Dona','Mme' ]
+        Mr : ['Mlle']
+        Ms : ['Miss']
+        Master
+        Mrs
+        '''
+        title_mapping = {'Mr': 1, 'Miss': 2, 'Mrs':3, 'Master':4, 'Royal':5, 'Rare': 6}
+        return title_mapping
+
+    @staticmethod
+    def title_nominal(this) -> object:
         combine = [this.train, this.test]
         for dataset in combine:
             dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.',expand=False)
             ic(dataset['Title'])
         return this
-
-    @staticmethod
-    def extract_title(this) -> None:
-        combine = [this.train, this.test]
-
-        for dataset in combine:
-            dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
-            a = set(dataset['Title'])
-        title_list = list(a)
-        ic(title_list)
 
     @staticmethod
     def age_ratio(this) -> object:
