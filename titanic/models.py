@@ -28,10 +28,11 @@ class TitanicModel(object):
         this = self.drop_feature(this,'Name')
         this = self.sex_nominal(this)
         this = self.drop_feature(this, 'Sex')
+        this = self.embarked_nominal(this)
         '''
         
         this = self.age_ratio(this)
-        this = self.embarked_nominal(this)
+        
         this = self.pclass_ordinal(this)
         this = self.fare_ratio(this)
         '''
@@ -134,7 +135,9 @@ class TitanicModel(object):
     @staticmethod
     def embarked_nominal(this) -> object:
         embarked_mapping = {'S': 1, 'C': 2, 'Q':3}
-        this.train = this.train.fillna({'Embarked':'S'})
+        this.train = this.train.fillna({'Embarked': 'S'})
+        for these in [this.train, this.test]:
+            these['Embarked'] = these['Embarked'].map(embarked_mapping)
         return this
 
     @staticmethod
