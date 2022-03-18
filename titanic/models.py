@@ -12,15 +12,17 @@ class TitanicModel(object):
     def preprocess(self, train_fname, test_fname):
         this = self.dataset
         that = self.model
+        feature = ['PassengerId','Survived','Pclass','Name','Sex','Age','SibSp','Parch','Ticket','Fare','Cabin','Embarked']
+        # 데이터셋은 Train, Test, Validation 3종류로 나뉜다
         this.train = that.new_dframe(train_fname)
         this.test = that.new_dframe(test_fname)
         this.id = this.test['PassengerId']
         this.label = this.train['Survived']
-        this.train = this.train.drop('Survived', axis = 1)
-        this = self.drop_feature(this)
+        this.train = this.train.drop('Survived', axis=1)
+        # Entity 에서 Object 로 전환
+        this = self.drop_feature(this, 'SibSp','Parch','Ticket','Cabin')
+        # self.kwargs_sample(name='이순신')
         '''
-        this = self.create_train(this)
-        this = self.create_label(this)
         this = self.name_nominal(this)
         this = self.sex_nominal(this)
         this = self.age_ratio(this)
@@ -28,33 +30,38 @@ class TitanicModel(object):
         this = self.pclass_ordinal(this)
         this = self.fare_ratio(this)
         '''
-        self.print_this(this)
+
+        self.df_info(this)
         return this
 
     @staticmethod
-    def print_this(this):
-        print('*'*100)
-        ic(f'1. Train 의 타입  {type(this.train)}')
-        ic(f'2. Train 의 컬럼  {this.train.columns}')
-        ic(f'3. Train 의 상위 1개  {this.train.head(1)}')
-        ic(f'4. Train 의 null의 개수  {this.train.isnull().sum()}')
-        ic(f'5. Test 의 타입  {type(this.test)}')
-        ic(f'6. Test 의 컬럼  {this.test.columns}')
-        ic(f'7. Test 의 상위 1개  {this.test.head(1)}')
-        ic(f'8. Test 의 null의 개수  {this.test.isnull().sum()}')
+    def df_info(this):
+        [ic(f'{i.info()}') for i in [this.train, this.test]]
+
+    @staticmethod
+    def null_check(this):
+        [ic(f'{i.isnull().sum()}') for i in [this.train, this.test]]
+
+    @staticmethod
+    def id_info(this):
         ic(f'9. id 의 타입  {type(this.id)}')
         ic(f'10. id 의 상위 3개 {this.id[:3]}')
-        print('*' * 100)
+
     @staticmethod
     def drop_feature(this, *feature) -> object:
-        a = [i for i in []]
+        ic(type(feature))
         '''
-        self.cabin_garbage(df)
-        self.parch_garbage(df)
-        self.ticket_garbage(df)
-        self.sib_sp_garbage(df)
-        '''
+        for i in [this.train, this.test]:
+            for j in feature:
+                i.drop(j, axis=1, inplace=True)'''
+        [i.drop(j, axis=1, inplace=True) for j in feature for i in [this.train, this.test]]
         return this
+
+    @staticmethod
+    def kwargs_sample(**kwargs) -> None:
+        ic(type(kwargs)) # ic| type(feature): <class 'tuple'>
+        {print(''.join(f'key:{i}, val:{j}')) for i, j in kwargs.items()} # key:name, val:이순신
+
     '''
     Categorical vs. Quantitative
     Cate -> nominal (이름) vs. ordinal (순서)
