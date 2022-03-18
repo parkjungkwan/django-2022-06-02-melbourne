@@ -84,10 +84,10 @@ class TitanicModel(object):
     @staticmethod
     def extract_title(this) -> None:
         combine = [this.train, this.test]
-        a = set()
+
         for dataset in combine:
             dataset['Title'] = dataset.Name.str.extract('([A-Za-z]+)\.', expand=False)
-            a.add(dataset['Title'])
+            a = set(dataset['Title'])
         title_list = list(a)
         ic(title_list)
 
