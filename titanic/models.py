@@ -54,7 +54,7 @@ class TitanicModel(object):
     @staticmethod
     def submit(this):
         clf = RandomForestClassifier()
-        clf.fit(this.train, this.test)
+        clf.fit(this.train, this.label)
         prediction = clf.predict(this.test)
         pd.DataFrame({'PassengerId': this.id, 'Survived': prediction}).to_csv('./save/submission.csv', index=False)
 
