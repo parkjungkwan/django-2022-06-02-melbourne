@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn.ensemble import RandomForestClassifier
+
 class TitanicModel(object):
 
     model = Model()
