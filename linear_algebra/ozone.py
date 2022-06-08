@@ -1,5 +1,7 @@
 # 온도에 따른 오존량 예측
-
+'''
+https://efacd.tistory.com/40
+'''
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt

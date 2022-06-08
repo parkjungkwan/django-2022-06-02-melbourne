@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+'''
+https://efacd.tistory.com/40
+'''
 class Solution(object):
     def __init__(self):
         # 1. Training Data Set
@@ -19,7 +21,7 @@ class Solution(object):
 
     # 3. Loss function
     def loss_func(self, x, t):
-        y = np.dot(x, self.W) + self.b
+        y = np.dot(x, self.W) + self.b # 내적
         return np.mean(np.power((t - y), 2))  # 최소 제곱법
 
 
@@ -81,6 +83,8 @@ class Solution(object):
         plt.scatter(self.x_data.ravel(), self.t_data.ravel())
         plt.plot(self.x_data.ravel(), np.dot(self.x_data, self.W) + self.b)  # 직선
         plt.show()
+
+
 
 if __name__ == '__main__':
     Solution().solution()
