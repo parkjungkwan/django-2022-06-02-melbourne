@@ -102,6 +102,9 @@ class ReaderBase(metaclass=ABCMeta):
 class Reader(ReaderBase):
     def new_file(self, file)-> str:
         return file.context + file.fname
+    # file.context = './data/'
+    # file.fname = 'cctv_in_seoul'
+    # file 객체에 있는 context와 fname이 필요하다.
 
     def csv(self, file)-> object:
         return pd.read_csv(f'{self.new_file(file)}.csv', encoding='UTF-8', thousands=',')
@@ -115,8 +118,7 @@ class Reader(ReaderBase):
     def gmaps(self) -> object:
         return googlemaps.Client(key='')
 
-class Printer(PrinterBase):
-    def dframe(self, this):
+    def print(self, this):
         print('*' * 100)
         print(f'1. Target type \n {type(this)} ')
         print(f'2. Target column \n {this.columns} ')
@@ -124,3 +126,5 @@ class Printer(PrinterBase):
         print(f'4. Target bottom 1개 행\n {this.tail(1)} ')
         print(f'4. Target null 의 갯수\n {this.isnull().sum()}개')
         print('*' * 100)
+
+
