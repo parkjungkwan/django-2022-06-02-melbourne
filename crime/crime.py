@@ -106,9 +106,28 @@ class Solution(Reader):
         pass
 
     def folium_test(self):
-        pass
-        # m = folium.Map(location=[45.5236, -122.6750])
-        # m.save("./save/folium_test.html")
+        file = self.file
+        file.fname = 'us-states.json'
+        states = self.new_file(file)
+        file.fname = 'us_unemployment'
+        unemployment = self.csv(file)
+        print(unemployment)
+        bins = list(unemployment["Unemployment"].quantile([0, 0.25, 0.5, 0.75, 1]))
+        m = folium.Map(location=[48, -102], zoom_start=5)
+        folium.Choropleth(
+            geo_data=states, # dataframe 아님
+            name="choropleth",
+            data=unemployment,
+            columns=["State", "Unemployment"],
+            key_on="feature.id",
+            fill_color="YlGn",
+            fill_opacity=0.7,
+            line_opacity=0.5,
+            legend_name="Unemployment Rate (%)",
+            bins=bins,
+            reset=True
+        ).add_to(m)
+        m.save("./save/folium_test.html")
 
     def draw_crime_map(self):
         file = self.file
