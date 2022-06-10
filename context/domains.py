@@ -115,10 +115,14 @@ class Reader(ReaderBase):
     def json(self, file)-> object:
         return pd.read_json(f'{self.new_file(file)}.json', encoding='UTF-8')
 
-    def gmaps(self) -> object:
-        return googlemaps.Client(key='')
+    @staticmethod
+    def gmaps() -> googlemaps.Client:
+        a = googlemaps.Client(key='')
+        print(type(a))
 
-    def print(self, this):
+
+    @staticmethod
+    def print(this):
         print('*' * 100)
         print(f'1. Target type \n {type(this)} ')
         print(f'2. Target column \n {this.columns} ')
@@ -127,4 +131,5 @@ class Reader(ReaderBase):
         print(f'4. Target null 의 갯수\n {this.isnull().sum()}개')
         print('*' * 100)
 
-
+if __name__ == '__main__':
+    Reader.gmaps()
