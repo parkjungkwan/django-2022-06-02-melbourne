@@ -8,10 +8,33 @@ class Solution(Reader):
         self.crime_rate_columns = ['살인검거율', '강도검거율', '강간검거율', '절도검거율', '폭력검거율']
         self.crime_columns = ['살인', '강도', '강간', '절도', '폭력']
 
+    def hook(self):
+        def print_menu():
+            print('0. Exit')
+            print('1. crime_in_seoul.csv, 구글맵 API 를 이용해서 서울시내 경찰서 주소목록파일(police_pos.csv)을 작성하시오.')
+            print('2. us-states.json, us_unemployment.csv 를 이용해서 미국 실업률 지도(folium_test.html)를 작성하시오.')
+            print('3. cctv_in_seoul.csv, pop_in_seoul.csv 를 이용해서 서울시내 경찰서 주소목록파일(cctv_pop.csv)을 작성하시오.')
+            return input('메뉴 선택 \n')
+
+        while 1:
+            menu = print_menu()
+            if menu == '0':
+                break
+            if menu == '1':
+                self.save_police_pos()
+            if menu == '2':
+                self.folium_test()
+            if menu == '3':
+                pass
+            elif menu == '0':
+                break
+
     def save_police_pos(self):
         file = self.file
         file.fname = 'crime_in_seoul'
         crime = self.csv(file)
+        print('********')
+        print(crime)
         station_names = []
         for name in crime['관서명']:
             station_names.append(f'서울{str(name[:-1])}경찰서')
@@ -69,17 +92,25 @@ class Solution(Reader):
                 'partial_match': True, 'place_id': 'ChIJc-9q5uSifDURLhQmr5wkXmc',
                 'plus_code': {'compound_code': 'HX7Q+CV 대한민국 서울특별시', 'global_code': '8Q98HX7Q+CV'},
                 'types': ['establishment', 'point_of_interest', 'police']}]
-
-            # station_addrs.append(temp[0].get('formatted_address'))
-            # t_loc = temp[0].get('geometry')
-            # station_lats.append(t_loc['location']['lat'])
-            # station_lats.append(t_loc['location']['lng'])
             print(f'name {i} = {temp[0].get("formatted_address")}')
+            '''
+            0번 중부서인경우는 "대한민국 서울특별시 중구 수표로 27" 이 담긴다.
+            1번 종로서인경우는 "대한민국 서울특별시 종로구 율곡로 46" 이 담긴다.
+            '''
+            station_addrs.append(temp[0].get('formatted_address'))
+            t_loc = temp[0].get('geometry')
+            station_lats.append(t_loc['location']['lat'])
+            station_lngs.append(t_loc['location']['lng'])
 
+        gu_names = []
+        for name in station_addrs:
+            temp = name.split()
+            # temp = ['대한민국', '서울특별시', '중구', '수표로', '27']
+            #
+            gu_name = [gu for gu in temp if gu[-1] == '구'][0]
+            gu_names.append(gu_name)
 
-
-
-
+        crime.to_csv('./save/police_pos.csv')
 
     def save_cctv_pos(self):
         file = self.file
@@ -99,7 +130,6 @@ class Solution(Reader):
         3     중구    133240   124312    8928     20764
         4    용산구    244203   229456   14747     36231
         '''
-
 
 
     def save_police_norm(self):
@@ -136,5 +166,5 @@ class Solution(Reader):
         print(a)
 
 if __name__ == '__main__':
-    a = Solution()
-    a.folium_test()
+    Solution().hook()
+
