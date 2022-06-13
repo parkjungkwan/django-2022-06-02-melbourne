@@ -1,3 +1,5 @@
+import pandas as pd
+
 from context.domains import Reader, File
 import folium
 
@@ -25,7 +27,7 @@ class Solution(Reader):
             if menu == '2':
                 self.folium_test()
             if menu == '3':
-                pass
+                self.save_cctv_pos()
             elif menu == '0':
                 break
 
@@ -33,8 +35,7 @@ class Solution(Reader):
         file = self.file
         file.fname = 'crime_in_seoul'
         crime = self.csv(file)
-        print('********')
-        print(crime)
+        # print(crime)
         station_names = []
         for name in crime['관서명']:
             station_names.append(f'서울{str(name[:-1])}경찰서')
@@ -92,7 +93,7 @@ class Solution(Reader):
                 'partial_match': True, 'place_id': 'ChIJc-9q5uSifDURLhQmr5wkXmc',
                 'plus_code': {'compound_code': 'HX7Q+CV 대한민국 서울특별시', 'global_code': '8Q98HX7Q+CV'},
                 'types': ['establishment', 'point_of_interest', 'police']}]
-            print(f'name {i} = {temp[0].get("formatted_address")}')
+            # print(f'name {i} = {temp[0].get("formatted_address")}')
             '''
             0번 중부서인경우는 "대한민국 서울특별시 중구 수표로 27" 이 담긴다.
             1번 종로서인경우는 "대한민국 서울특별시 종로구 율곡로 46" 이 담긴다.
@@ -106,22 +107,22 @@ class Solution(Reader):
         for name in station_addrs:
             temp = name.split()
             # temp = ['대한민국', '서울특별시', '중구', '수표로', '27']
-            #
             gu_name = [gu for gu in temp if gu[-1] == '구'][0]
             gu_names.append(gu_name)
-
+        crime['구별'] = gu_names
+        # print(crime)
         crime.to_csv('./save/police_pos.csv')
 
     def save_cctv_pos(self):
         file = self.file
         file.fname = 'cctv_in_seoul'
         cctv = self.csv(file)
-        pop = None # 헤더는 2행, 사용하는 컬럼은 B, D, G, J, N 을 사용한다.
         file.fname = 'pop_in_seoul'
-        cols = "B,D,G,J,N"
-        header = [1]
-        pop = self.xls(file,header,cols)
-        # print(pop)
+        cols = "B,D,G,J,N" # 엑셀에서 해당 컬럼만 사용함
+        header = [1] # 자치구  합계  한국인  등록외국인 65세이상고령자 는 헤더로 취급
+        skiprows = [2] # 0 자치구   계  계 계  65세이상고령자 행 제거
+        pop = self.xls(file,header,cols,skiprows=skiprows) # 헤더는 2행, 사용하는 컬럼은 B, D, G, J, N 을 사용한다.
+        print(pop)
         '''
              자치구        합계      한국인   등록외국인  65세이상고령자
         0    자치구         계        계       계  65세이상고령자
@@ -129,7 +130,26 @@ class Solution(Reader):
         2    종로구    162820   153589    9231     25425
         3     중구    133240   124312    8928     20764
         4    용산구    244203   229456   14747     36231
+        
+        를 아래와 같이 변경함.skiprows 사용
+        
+             자치구          합계        한국인     등록외국인   65세이상고령자
+        0     합계  10197604.0  9926968.0  270636.0  1321458.0
+        1    종로구    162820.0   153589.0    9231.0    25425.0
+        2     중구    133240.0   124312.0    8928.0    20764.0
+        3    용산구    244203.0   229456.0   14747.0    36231.0
         '''
+        # print(cctv)
+        '''
+             기관명    소계  2013년도 이전  2014년  2015년  2016년
+        0    강남구  2780       1292    430    584    932
+        1    강동구   773        379     99    155    377
+        2    강북구   748        369    120    138    204
+        3    강서구   884        388    258    184     81
+        '''
+
+        cctv_pop = pd.DataFrame()
+        cctv_pop.to_csv('./save/cctv_pop.csv')
 
 
     def save_police_norm(self):

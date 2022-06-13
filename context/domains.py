@@ -89,15 +89,15 @@ class ReaderBase(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def csv(self)-> object:
+    def csv(self)-> PandasDataFrame:
         pass
 
     @abstractmethod
-    def xls(self)-> object:
+    def xls(self)-> PandasDataFrame:
         pass
 
     @abstractmethod
-    def json(self)-> object:
+    def json(self)-> PandasDataFrame:
         pass
 
 # Reader
@@ -115,8 +115,8 @@ class Reader(ReaderBase):
         return o
 
 
-    def xls(self, path: str, header: str, cols: str)-> PandasDataFrame:
-        return pd.read_excel(f'{self.new_file(path)}.xls', header=header, usecols=cols)
+    def xls(self, path: str, header: str, cols: str, skiprows)-> PandasDataFrame:
+        return pd.read_excel(f'{self.new_file(path)}.xls', header=header, usecols=cols, skiprows=skiprows)
 
     def json(self, path: str)-> PandasDataFrame:
         return pd.read_json(f'{self.new_file(path)}.json', encoding='UTF-8')
