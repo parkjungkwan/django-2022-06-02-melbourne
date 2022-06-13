@@ -113,7 +113,7 @@ class Solution(Reader):
             gu_names.append(gu_name)
         crime['구별'] = gu_names
         # print(crime)
-        crime.to_csv('./save/police_pos.csv')
+        crime.to_csv('./save/police_pos.csv', index=False) # index 랜덤생성 방지
 
     def save_cctv_pos(self):
         file = self.file
@@ -206,18 +206,19 @@ class Solution(Reader):
         file.fname = 'police_pos'
         police_pos = self.csv(file)
         police = pd.pivot_table(police_pos, index='구별', aggfunc=np.sum)
-        police['살인검거율'] = police['살인 검거'] / police['살인 발생'] * 100
-        police['강도검거율'] = police['강도 검거'] / police['강도 발생'] * 100
-        police['강간검거율'] = police['강간 검거'] / police['강간 발생'] * 100
-        police['절도검거율'] = police['절도 검거'] / police['절도 발생'] * 100
-        police['폭력검거율'] = police['폭력 검거'] / police['폭력 발생'] * 100
+        police['살인검거율'] = police['살인 검거'].astype(int) / police['살인 발생'].astype(int) * 100
+        police['강도검거율'] = police['강도 검거'].astype(int) / police['강도 발생'].astype(int) * 100
+        police['강간검거율'] = police['강간 검거'].astype(int) / police['강간 발생'].astype(int) * 100
+        police['절도검거율'] = police['절도 검거'].astype(int) / police['절도 발생'].astype(int) * 100
+        police['폭력검거율'] = police['폭력 검거'].astype(int) / police['폭력 발생'].astype(int) * 100
         police.drop(columns={'살인 검거','강도 검거','강간 검거','절도 검거','폭력 검거'}, axis=1, inplace=True)
-        print('%' * 100)
-        police.to_csv('./save/police.csv', sep=',', encoding='UTF-8')
+
+
         for i in self.crime_rate_columns:
-
-            police.loc[police[i]> 100, 1] = 100 # 데이터값의 기간 오류로 100을 넘으면 100으로 계산
-
+            # loc() 는 데이터프레임의 행이나 컬럼에 index로 접근한다.
+            # 그래서 police[i] 로 접근하도록 한다.
+            police[i].loc[police[i]> 100] = 100 # 데이터값의 기간 오류로 100을 넘으면 100으로 계산
+        police.to_csv('./save/police.csv', sep=',', encoding='UTF-8')
         police.rename(columns={
             '살인 발생': '살인',
             '강도 발생': '강도',
