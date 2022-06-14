@@ -25,14 +25,16 @@ class Solution(Reader):
             menu = print_menu()
             if menu == '0':
                 break
-            if menu == '1':
+            elif menu == '1':
                 self.save_police_pos()
-            if menu == '2':
+            elif menu == '2':
                 self.folium_test()
-            if menu == '3':
+            elif menu == '3':
                 self.save_cctv_pos()
             elif menu == '4':
                 self.save_police_norm()
+            elif menu == '5':
+                self.draw_crime_map()
 
     def save_police_pos(self):
         file = self.file
@@ -270,17 +272,20 @@ class Solution(Reader):
 
     def draw_crime_map(self):
         file = self.file
+        file.context = './data/'
         file.fname = 'geo_simple' # 서울시지도 geo_simple.json
-        geo_simple = self.json(file)
-        # 검거율 정규화 데이터 police_norm.csv
-        police_norm = None
+        seoul_map = self.map_json(file)
+        print(seoul_map)
         # 범죄현황 데이터 crime_in_seoul.csv
-        crime = None
+        file.fname = 'crime_in_seoul'
+        crime = self.csv(file)
+        file.context = './save/'
+        # 검거율 정규화 데이터 police_norm.csv
+        file.fname  = 'police_norm'
+        police_norm = self.csv(file)
         # 경찰서위치 police_pos.csv
-        police_pos = None
-
-
-
+        file.fname = 'police_pos'
+        police_pos = self.csv(file)
         station_names = []
         for name in crime['관서명']:
             station_names.append(f'서울{str(name[:-1])}경찰서')
@@ -299,6 +304,30 @@ class Solution(Reader):
             t_loc = temp[0].get('geometry')
             station_lats.append(t_loc['location']['lat'])
             station_lngs.append(t_loc['location']['lng'])
+        police_pos['lat'] = station_lats
+        police_pos['lng'] = station_lngs
+        col = ['살인 검거', '강도 검거', '강간 검거', '절도 검거', '폭력 검거']
+        tmp = police_pos[col] / police_pos[col].max()
+        police_pos['검거'] = np.sum(tmp, axis=1)
+        folium_map = folium.Map(location=[37.5502, 126.982], zoom_start=12, title='Stamen Toner')
+
+        folium.Choropleth(
+            geo_data=seoul_map,
+            data=tuple(zip(police_norm['구별'], police_norm['범죄'])),
+            columns=["State", "Crime Rate"],
+            key_on="feature.id",
+            fill_color="PuRd",
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            legend_name="Crime Rate (%)",
+            reset=True,
+        ).add_to(folium_map)
+        for i in police_pos.index:
+            folium.CircleMarker([police_pos['lat'][i], police_pos['lng'][i]],
+                                radius=police_pos['검거'][i] * 10,
+                                fill_color='#0a0a32').add_to(folium_map)
+
+        folium_map.save('./save/crime_map.html')
 
     def jongam_police_info(self):
         return [{'address_components':
