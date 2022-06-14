@@ -18,6 +18,7 @@ class Solution(Reader):
             print('2. us-states.json, us_unemployment.csv 를 이용해서 미국 실업률 지도(folium_test.html)를 작성하시오.')
             print('3. cctv_in_seoul.csv, pop_in_seoul.csv 를 이용해서 서울시내 경찰서 주소목록파일(cctv_pop.csv)을 작성하시오.')
             print('4. police_pos.csv, 를 이용해서 경찰서 범죄검거율 정규화파일(police_norm.csv)을 작성하시오.')
+            print('5. 주어진 데이터를 활용해서 서울시내 경찰서 범죄발생과 검거율 현황지도(폴리움)를 작성하시오.')
             return input('메뉴 선택 \n')
 
         while 1:
@@ -79,22 +80,7 @@ class Solution(Reader):
             if name != '서울종암경찰서':
                 temp = gmaps.geocode(name, language='ko')
             else:
-                temp = [{'address_components':
-            [{'long_name': '32', 'short_name': '32', 'types': ['premise']},
-            {'long_name': '화랑로7길', 'short_name': '화랑로7길', 'types': ['political', 'sublocality', 'sublocality_level_4']},
-            {'long_name': '성북구', 'short_name': '성북구', 'types': ['political', 'sublocality', 'sublocality_level_1']},
-            {'long_name': '서울특별시', 'short_name': '서울특별시', 'types': ['administrative_area_level_1', 'political']},
-            {'long_name': '대한민국', 'short_name': 'KR', 'types': ['country', 'political']},
-            {'long_name': '100-032', 'short_name': '100-032', 'types': ['postal_code']}],
-            'formatted_address': '대한민국 서울특별시 성북구 화랑로7길 32',
-            'geometry': {'location':
-                {'lat': 37.60388169879458, 'lng': 127.04001571848704},
-                'location_type': 'ROOFTOP',
-                'viewport': {'northeast': {'lat': 37.60388169879458, 'lng': 127.04001571848704},
-                'southwest': {'lat': 37.60388169879458, 'lng': 127.04001571848704}}},
-                'partial_match': True, 'place_id': 'ChIJc-9q5uSifDURLhQmr5wkXmc',
-                'plus_code': {'compound_code': 'HX7Q+CV 대한민국 서울특별시', 'global_code': '8Q98HX7Q+CV'},
-                'types': ['establishment', 'point_of_interest', 'police']}]
+                temp = self.jongam_police_info()
             # print(f'name {i} = {temp[0].get("formatted_address")}')
             '''
             0번 중부서인경우는 "대한민국 서울특별시 중구 수표로 27" 이 담긴다.
@@ -258,7 +244,6 @@ class Solution(Reader):
         police_norm['검거'] = np.sum(police_norm[self.crime_columns], axis=1)
         police_norm.to_csv('./save/police_norm.csv', sep=',', encoding='UTF-8')
 
-
     def folium_test(self):
         file = self.file
         file.fname = 'us-states.json'
@@ -285,9 +270,56 @@ class Solution(Reader):
 
     def draw_crime_map(self):
         file = self.file
-        file.fname = 'geo_simple'
-        a = self.csv(file)
-        print(a)
+        file.fname = 'geo_simple' # 서울시지도 geo_simple.json
+        geo_simple = self.json(file)
+        # 검거율 정규화 데이터 police_norm.csv
+        police_norm = None
+        # 범죄현황 데이터 crime_in_seoul.csv
+        crime = None
+        # 경찰서위치 police_pos.csv
+        police_pos = None
+
+
+
+        station_names = []
+        for name in crime['관서명']:
+            station_names.append(f'서울{str(name[:-1])}경찰서')
+
+        gmaps = self.gmaps()
+        station_addrs = []
+        station_lats = []
+        station_lngs = []
+
+        for i, name in enumerate(station_names):
+            if name != '서울종암경찰서':
+                temp = gmaps.geocode(name, language='ko')
+            else:
+                temp = self.jongam_police_info()
+            station_addrs.append(temp[0].get('formatted_address'))
+            t_loc = temp[0].get('geometry')
+            station_lats.append(t_loc['location']['lat'])
+            station_lngs.append(t_loc['location']['lng'])
+
+    def jongam_police_info(self):
+        return [{'address_components':
+                             [{'long_name': '32', 'short_name': '32', 'types': ['premise']},
+                              {'long_name': '화랑로7길', 'short_name': '화랑로7길',
+                               'types': ['political', 'sublocality', 'sublocality_level_4']},
+                              {'long_name': '성북구', 'short_name': '성북구',
+                               'types': ['political', 'sublocality', 'sublocality_level_1']},
+                              {'long_name': '서울특별시', 'short_name': '서울특별시',
+                               'types': ['administrative_area_level_1', 'political']},
+                              {'long_name': '대한민국', 'short_name': 'KR', 'types': ['country', 'political']},
+                              {'long_name': '100-032', 'short_name': '100-032', 'types': ['postal_code']}],
+                         'formatted_address': '대한민국 서울특별시 성북구 화랑로7길 32',
+                         'geometry': {'location':
+                                          {'lat': 37.60388169879458, 'lng': 127.04001571848704},
+                                      'location_type': 'ROOFTOP',
+                                      'viewport': {'northeast': {'lat': 37.60388169879458, 'lng': 127.04001571848704},
+                                                   'southwest': {'lat': 37.60388169879458, 'lng': 127.04001571848704}}},
+                         'partial_match': True, 'place_id': 'ChIJc-9q5uSifDURLhQmr5wkXmc',
+                         'plus_code': {'compound_code': 'HX7Q+CV 대한민국 서울특별시', 'global_code': '8Q98HX7Q+CV'},
+                         'types': ['establishment', 'point_of_interest', 'police']}]
 
 if __name__ == '__main__':
     Solution().hook()
