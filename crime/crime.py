@@ -4,6 +4,7 @@ from context.domains import Reader, File
 import folium
 import numpy as np
 from sklearn import preprocessing
+
 class Solution(Reader):
     def __init__(self):
         self.file = File()
