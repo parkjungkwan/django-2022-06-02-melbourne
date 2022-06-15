@@ -12,6 +12,10 @@ import tweepy
 
 from context.domains import Reader, File
 '''
+자연어 처리에서 크롤링 등으로 얻어낸 코퍼스 데이터가 필요에 맞게 전처리되지 않은 상태라면, 
+해당 데이터를 사용하고자하는 용도에 맞게 토큰화(tokenization) & 정제(cleaning) & 정규화(normalization)하는 일을 하게 됩니다. 
+이번에는 그 중에서도 토큰화에 대해서 학습합니다.
+
 문장 형태의 문자 데이터를 전처리할 때 많이 사용되는 방법이다. 
 말뭉치(코퍼스 corpus)를 어떤 토큰의 단위로 분할하냐에 따라 
 단어 집합의 크기, 단어 집합이 표현하는 토크의 형태가 다르게 나타나며 
@@ -116,17 +120,22 @@ class Solution(Reader):
         ic(texts)
         return texts
 
-    def remove_stopword(self):
+    def token_embedding(self) -> []:
         tokens = self.tokenization()
         stopwords = self.read_stopword()
-        texts = []
-        print(texts)
+        texts = [text for text in tokens if text not in stopwords]
+        return texts
 
-    def token_embedding(self):
-        pass
-
-    def document_embedding(self):
-        pass
+    def draw_wordcloud(self):
+        _ = self.token_embedding()
+        freqtxt = pd.Series(dict(FreqDist(_))).sort_values(ascending=False)
+        ic(freqtxt)
+        wcloud = WordCloud('./data/D2Coding.ttf', relative_scaling=0.2,
+                           background_color='white').generate(" ".join(_))
+        plt.figure(figsize=(12, 12))
+        plt.imshow(wcloud, interpolation='bilinear')
+        plt.axis('off')
+        plt.show()
 
 
 if __name__ == '__main__':
