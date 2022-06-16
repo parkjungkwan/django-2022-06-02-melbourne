@@ -10,7 +10,6 @@ import math
 from matplotlib import rc, font_manager
 rc('font', family=font_manager.FontProperties(fname='C:/Windows/Fonts/malgunsl.ttf').get_name())
 import matplotlib
-
 matplotlib.rcParams['axes.unicode_minus'] = False
 import numpy as np
 '''
@@ -18,10 +17,13 @@ import numpy as np
 https://prlabhotelshoe.tistory.com/20?category=1003351
 '''
 class Solution(Reader):
-    def __init__(self):
+    def __init__(self, k=0.5):
         self.movie_comments = pd.DataFrame()
         self.file = File()
         self.file.context = './data/'
+        # 나이브베이즈 설정값
+        self.k = k
+        self.word_probs = []
 
     def hook(self):
         def print_menu():
@@ -29,9 +31,9 @@ class Solution(Reader):
             print(' **** 전처리 *** ')
             print('1. 크롤링(텍스트 마이닝)')
             print('2. 정형화(객체)')
-            print('3. 토큰화')
-            print('4. 임베딩')
-            print(' **** 후처리 *** ')
+            print('3. 다음 영화 댓글이 긍정인지 부정인지 ratio 값으로 판단하시오 \n'
+                  '너무 좋아요. 내 인생의 최고의 명작 영화\n'
+                  '이렇게 졸린 영화는 처음이야')
             return input('메뉴 선택 \n')
 
         while 1:
@@ -43,7 +45,7 @@ class Solution(Reader):
             elif menu == '2':
                 self.preprocess()
             elif menu == '3':
-                pass
+                self.naiveBayesClassifier()
 
     def preprocess(self):
         self.stereotype()
@@ -176,11 +178,54 @@ class Solution(Reader):
             ax.axis('equal')
         plt.show()
 
-    def tokenization(self):
+    def naiveBayesClassifier(self, doc):
+        path = ''
+        self.load_corpus()
+        training_set = None
+        self.count_words(training_set)
+        counts = 0
+        total_class0 = 0
+        total_class1 = 0
+        k = self.k
+        word_probs = 0
+        trainfile_path = ''
+        self.word_probabilities(counts, total_class0, total_class1, k)
+        self.class0_probabilities(word_probs, doc)
+        self.train(trainfile_path)
+        self.classify(doc)
+
+    def load_corpus(self, path):
+        corpus = pd.read_table()
+        return corpus
+
+    def count_words(self, training_set):
+        counts = 0
+        return counts
+
+    def isNumber(self, s):
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+
+    def word_probabilities(self, counts, total_class0, total_class1, k):
+        # 단어의 빈도수를 [단어, p(w|긍정), p(w|부정)] 형태로 변환
+        return []
+
+    def class0_probabilities(self, word_probs, doc):
+        return None
+
+    def train(self, trainfile_path):
         pass
 
-    def embedding(self):
-        pass
+    def classify(self, doc):
+        return self.class0_probabilities(self.word_probs, doc)
+
+
+
+
+
 
 if __name__ == '__main__':
     Solution().hook()
