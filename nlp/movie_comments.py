@@ -107,8 +107,8 @@ class Solution(Reader):
         ic(movie_lst[:10])
         cnt_movie = df.title.value_counts()
         ic(cnt_movie[:20])
-        info_movie = df.groupby('title')['score'].describe()
-        ic(info_movie.sort_values(by=['count'], axis=0, ascending=False))
+        # info_movie = df.groupby('title')['score'].describe() lambda 로 변환
+        ic((lambda a,b: df.groupby(a)[b].describe())('title','score').sort_values(by=['count'], axis=0, ascending=False))
 
     def top10_movies(self, df):
         top10 = df.title.value_counts().sort_values(ascending=False)[:10]
