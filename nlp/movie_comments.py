@@ -6,11 +6,13 @@ from context.domains import Reader, File
 from icecream import ic
 import pandas as pd
 from matplotlib import pyplot as plt
-from scipy import misc
+import math
 from matplotlib import rc, font_manager
 rc('font', family=font_manager.FontProperties(fname='C:/Windows/Fonts/malgunsl.ttf').get_name())
 import matplotlib
+
 matplotlib.rcParams['axes.unicode_minus'] = False
+import numpy as np
 '''
 예제 출처
 https://prlabhotelshoe.tistory.com/20?category=1003351
@@ -55,7 +57,8 @@ class Solution(Reader):
         # 긍정, 부정 리뷰 수
         df.label.value_counts()
         top10 = self.top10_movies(df)
-        self.visualization(top10)
+        avg_score = self.get_avg_score(top10)
+        self.visualization(top10, avg_score)
 
 
 
@@ -112,8 +115,47 @@ class Solution(Reader):
         top10_title = top10.index.tolist()
         return df[df['title'].isin(top10_title)]
 
-    def visualization(self, top10):
-        pass
+    def get_avg_score(self, top10):
+        movie_title = top10.title.unique().tolist()  # -- 영화 제목 추출
+        avg_score = {}  # -- {제목 : 평균} 저장
+        for t in movie_title:
+            avg = top10[top10['title'] == t]['score'].mean()
+            avg_score[t] = avg
+        return avg_score
+
+
+
+    def visualization(self, top10, avg_score):
+        plt.figure(figsize=(10, 5))
+        plt.title('영화 평균 평점 (top 10: 리뷰 수)\n', fontsize=17)
+        plt.xlabel('영화 제목')
+        plt.ylabel('평균 평점')
+        plt.xticks(rotation=20)
+
+        for x, y in avg_score.items():
+            color = np.array_str(np.where(y == max(avg_score.values()), 'orange', 'lightgrey'))
+            plt.bar(x, y, color=color)
+            plt.text(x, y, '%.2f' % y,
+                     horizontalalignment='center',
+                     verticalalignment='bottom')
+
+        # plt.show()
+        self.rating_distribution(top10, avg_score)
+
+    def rating_distribution(self,top10, avg_score):
+        fig, axs = plt.subplots(5, 2, figsize=(15, 25))
+        axs = axs.flatten()
+
+        for title, avg, ax in zip(avg_score.keys(), avg_score.values(), axs):
+            num_reviews = len(top10[top10['title'] == title])
+            x = np.arange(num_reviews)
+            y = top10[top10['title'] == title]['score']
+            ax.set_title('\n%s (%d명)' % (title, num_reviews), fontsize=15)
+            ax.set_ylim(0, 10.5, 2)
+            ax.plot(x, y, 'o')
+            ax.axhline(avg, color='red', linestyle='--')  # -- 평균 점선 나타내기
+
+        plt.show()
 
     def tokenization(self):
         pass
