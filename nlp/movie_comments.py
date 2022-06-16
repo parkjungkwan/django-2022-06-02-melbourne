@@ -45,7 +45,8 @@ class Solution(Reader):
             elif menu == '2':
                 self.preprocess()
             elif menu == '3':
-                self.naiveBayesClassifier()
+                check = self.naiveBayesClassifier('너무 좋아요. 내 인생의 최고의 명작 영화')
+                ic(check) # 0.89
 
     def preprocess(self):
         self.stereotype()
@@ -180,7 +181,7 @@ class Solution(Reader):
 
     def naiveBayesClassifier(self, doc):
         path = ''
-        self.load_corpus()
+        self.load_corpus(path)
         training_set = None
         self.count_words(training_set)
         counts = 0
@@ -196,6 +197,7 @@ class Solution(Reader):
 
     def load_corpus(self, path):
         corpus = pd.read_table()
+
         return corpus
 
     def count_words(self, training_set):
