@@ -140,7 +140,8 @@ class Solution(Reader):
                      verticalalignment='bottom')
 
         # plt.show()
-        self.rating_distribution(top10, avg_score)
+        # self.rating_distribution(top10, avg_score)
+        self.circle_chart(top10, avg_score)
 
     def rating_distribution(self,top10, avg_score):
         fig, axs = plt.subplots(5, 2, figsize=(15, 25))
@@ -155,6 +156,24 @@ class Solution(Reader):
             ax.plot(x, y, 'o')
             ax.axhline(avg, color='red', linestyle='--')  # -- 평균 점선 나타내기
 
+        plt.show()
+
+    def circle_chart(self, top10, avg_score):
+        fig, axs = plt.subplots(5, 2, figsize=(15, 25))
+        axs = axs.flatten()
+        colors = ['pink', 'gold', 'whitesmoke']
+        labels = ['1 (8~10점)', '0 (1~4점)', '2 (5~7점)']
+
+        for title, ax in zip(avg_score.keys(), axs):
+            num_reviews = len(top10[top10['title'] == title])
+            values = top10[top10['title'] == title]['label'].value_counts()
+            ax.set_title('\n%s (%d명)' % (title, num_reviews), fontsize=15)
+            ax.pie(values,
+                   autopct='%1.1f%%',
+                   colors=colors,
+                   shadow=True,
+                   startangle=90)
+            ax.axis('equal')
         plt.show()
 
     def tokenization(self):
