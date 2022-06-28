@@ -1,9 +1,29 @@
+from dataclasses import dataclass
+import tensorflow as tf
+from icecream import ic
 @dataclass
 class Machine(object):
     def __init__(self):
         self._num1 = 0
         self._num2 = 0
         self._opcode = ''
+
+    @property
+    def num1(self) -> int: return self._num1
+    @num1.setter
+    def num1(self, num1): self._num1 =num1
+
+    @property
+    def num2(self) -> int: return self._num2
+
+    @num2.setter
+    def num2(self, num2): self._num2 = num2
+
+    @property
+    def opcode(self) -> str: return self._opcode
+
+    @opcode.setter
+    def opcode(self, opcode): self._opcode = opcode
 
 
 class Solution:
@@ -17,15 +37,15 @@ class Solution:
 
     @tf.function
     def sub(self):
-        return tf.add(self._num1, self._num2)
+        return tf.subtract(self._num1, self._num2)
 
     @tf.function
     def mul(self):
-        return tf.add(self._num1, self._num2)
+        return tf.multiply(self._num1, self._num2)
 
     @tf.function
     def div(self):
-        return tf.add(self._num1, self._num2)
+        return tf.divide(self._num1, self._num2)
 
 class UseModel:
     def __init__(self):
@@ -39,13 +59,20 @@ class UseModel:
         solution = Solution(model)
         if opcode == '+':
             result = solution.add()
+        elif opcode == '-':
+            result = solution.sub()
+        elif opcode == '*':
+            result = solution.mul()
+        elif opcode == '/':
+            result = solution.div()
 
         # 사칙연산 완성시킬것
 
         return result
 
 if __name__ == '__main__':
-    pass
+    result = UseModel().calc(num1=1, num2=4, opcode='+')
+    ic(result)
 
 
 
